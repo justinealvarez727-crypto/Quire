@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useData } from '../lib/DataContext.jsx';
 import { useUI } from './ui.jsx';
 import { BEATS, fmt, nextStatus, sortBy } from '../lib/util.js';
+import { htmlToPlain } from '../lib/richtext.js';
 
 const STATUS_LABEL = { draft: 'draft', revised: 'revised', final: 'final' };
 function Mark({ status }) {
@@ -151,7 +152,7 @@ export default function Outline({ project, onOpenScene }) {
                 <button type="button" className="face" onClick={(e) => { if (!e.target.closest('[data-hole],[data-mk]')) setFlipped(s.id); }}>
                   <div className="cTop"><span>{fmt(allScenes.findIndex((x) => x.id === s.id) + 1)}</span><span>{data.chapters.find((c) => c.id === s.chapter_id)?.title || ''}</span></div>
                   <div className="cTitle">{s.title || 'Untitled scene'}</div>
-                  <div className="cSyn">{s.text ? s.text.slice(0, 120) : 'No text yet.'}</div>
+                  <div className="cSyn">{s.text ? htmlToPlain(s.text).slice(0, 120) : 'No text yet.'}</div>
                   <div className="cFoot">
                     <span className="cW">{fmt(s.word_count)} w</span>
                     <span data-mk role="button" tabIndex={0} className="mk"
@@ -166,7 +167,7 @@ export default function Outline({ project, onOpenScene }) {
               ) : (
                 <button type="button" className="face" style={{ textAlign: 'left' }} onClick={() => setFlipped(null)}>
                   <b style={{ display: 'block', fontFamily: 'var(--wf)', fontWeight: 700, fontSize: 13, borderBottom: '1.5px solid var(--red)', marginBottom: 4 }}>{s.title}</b>
-                  <p style={{ fontSize: 11.5, lineHeight: 1.4, margin: 0 }}>{s.text ? s.text.slice(0, 180) : 'No text yet.'}</p>
+                  <p style={{ fontSize: 11.5, lineHeight: 1.4, margin: 0 }}>{s.text ? htmlToPlain(s.text).slice(0, 180) : 'No text yet.'}</p>
                   <div style={{ position: 'absolute', bottom: 6, left: 9, right: 6, display: 'flex', justifyContent: 'space-between' }}>
                     <button className="link" type="button" onClick={(e) => { e.stopPropagation(); onOpenScene(s.id); }}>open</button>
                     <button className="link danger" type="button" onClick={(e) => { e.stopPropagation(); removeScene(s.id, s.title); }}>delete</button>

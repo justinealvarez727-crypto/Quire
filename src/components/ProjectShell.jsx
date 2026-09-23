@@ -9,6 +9,7 @@ import Research from './Research.jsx';
 import ProgressTab from './ProgressTab.jsx';
 import SettingsPanel from './SettingsPanel.jsx';
 import { download, orderedScenes } from '../lib/util.js';
+import { htmlToPlain } from '../lib/richtext.js';
 
 const TABS = [
   ['write', 'Write'], ['outline', 'Outline'], ['bible', 'Bible'],
@@ -43,7 +44,7 @@ export default function ProjectShell({ projectId, onBack }) {
     chapters.forEach((c) => {
       out.push('', c.title || 'Untitled chapter', '');
       const scenes = data.scenes.filter((s) => s.chapter_id === c.id).sort((a, b) => a.position - b.position);
-      scenes.forEach((s, i) => { if (i > 0) out.push('', '*   *   *', ''); out.push((s.text || '').trim()); });
+      scenes.forEach((s, i) => { if (i > 0) out.push('', '*   *   *', ''); out.push(htmlToPlain(s.text).trim()); });
     });
     const slug = (project.title || 'novel').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'novel';
     download(slug + '.txt', out.join('\n') + '\n');
@@ -54,19 +55,19 @@ export default function ProjectShell({ projectId, onBack }) {
 
   return (
     <div className="app shell">
-      <div style={{ gridColumn: '1/-1' }} className="shellHead">
-        {!focus && <button className="back" type="button" onClick={onBack}>‹ Novels</button>}
-        <input value={project.title} placeholder="Novel title" onChange={(e) => updateProject(project.id, { title: e.target.value })}
-          style={{ flex: 1, border: 0, background: 'transparent', font: '700 17px var(--type)', color: 'var(--ink)', minWidth: 0 }} hidden={focus} />
-        {!focus && (
+      {!focus && (
+        <div style={{ gridColumn: '1/-1' }} className="shellHead">
+          <button className="back" type="button" onClick={onBack}>‹ Novels</button>
+          <input value={project.title} placeholder="Novel title" onChange={(e) => updateProject(project.id, { title: e.target.value })}
+            style={{ flex: 1, border: 0, background: 'transparent', font: '700 17px var(--type)', color: 'var(--ink)', minWidth: 0 }} />
           <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span className={'saveTag' + (saveState === 'error' ? ' bad' : '')}>
               {saveState === 'error' ? 'Couldn\u2019t save' : saveState === 'saving' ? 'Saving…' : 'Saved'}
             </span>
             <button className="link" type="button" onClick={() => setShowSettings(true)}>Aa</button>
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       {!focus && (
         <nav className="sideNav" aria-label="Sections">
@@ -79,7 +80,7 @@ export default function ProjectShell({ projectId, onBack }) {
         </nav>
       )}
 
-      <main className="shellMain">
+      <main className="shellMain" style={focus ? { gridColumn: '1/-1' } : undefined}>
         {showSettings ? (
           <div>
             <div className="sheetHead" style={{ marginBottom: 6 }}>

@@ -68,9 +68,11 @@ It'll open full-screen like any other app, with its own icon.
 
 ## What's in each tab
 
-- **Write** — one scene at a time, autosaving as you type, with a status mark
-  (draft / revised / final), adjustable font and size, a Focus mode, and an
-  optional grammar checker.
+- **Write** — one scene at a time, autosaving as you type, with bold,
+  italic, indent/outdent, and a paragraph style (normal or centered — handy
+  for a scene break like "\* \* \*"), a status mark (draft / revised /
+  final), adjustable font and size, a Focus mode, and an optional grammar
+  checker.
 - **Outline** — scenes as index cards you drag to reorder. Switch between a
   freeform list, Three-act, or Save the Cat; template views group your scenes
   under each beat.
@@ -111,6 +113,13 @@ Add that to `.env.local` (and to Vercel's environment variables if you
 deploy). Leave it unset to use the public API.
 
 ## Notes for later
+
+- Scenes are stored as rich text (HTML) now. Anything written before this
+  update was plain text — it's upgraded automatically the first time each
+  scene opens, so nothing is lost, it just won't have bold/italic applied
+  retroactively (there was none to carry over).
+- Formatting doesn't carry into the .txt export — that's always plain text,
+  paragraphs separated by blank lines.
 
 - `npm run build:single` produces one self-contained HTML file (no PWA, no
   sync — "this device" mode only) if you ever want an offline copy you can

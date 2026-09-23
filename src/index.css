@@ -67,7 +67,7 @@ button{cursor:pointer}
 
 /* --- write --- */
 .sheet{position:relative;background:var(--paper);border:1px solid var(--edge);padding:16px 18px 20px 26px;
-  box-shadow:2px 2px 0 var(--paper),2px 2px 0 1px var(--edge),5px 5px 0 var(--paper),5px 5px 0 1px var(--edge); margin:6px 2px 14px}
+  box-shadow:2px 2px 0 var(--paper),2px 2px 0 1px var(--edge),5px 5px 0 var(--paper),5px 5px 0 1px var(--edge); margin:6px auto 14px;max-width:var(--tw)}
 :root[data-theme="legal"] .sheet::before{content:"";position:absolute;left:14px;top:0;bottom:0;width:5px;border-left:1.5px solid var(--red);border-right:1.5px solid var(--red)}
 .sheetHead{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:34px}
 .tbtn{border:1px solid var(--edge);background:transparent;padding:5px 10px;font-size:13px;min-height:34px}
@@ -84,7 +84,16 @@ button{cursor:pointer}
 .saveTag{font-size:12px;color:var(--pencil)}
 .saveTag.bad{color:var(--red)}
 .empty{padding:40px 4px;color:var(--pencil);font-family:var(--wf);font-size:16px;line-height:1.6}
-.editorTextarea{width:100%;border:0;background:transparent;font-family:var(--wf);font-size:var(--wsz);line-height:var(--wlh);resize:none;outline:none;caret-color:var(--red);padding:12px 0 0;min-height:50vh}
+.editToolbar{display:flex;align-items:center;gap:2px;margin:10px 0 2px;flex-wrap:wrap}
+.editToolbar button{border:1px solid transparent;background:none;color:var(--pencil);min-width:32px;min-height:32px;font-size:14px;border-radius:4px}
+.editToolbar button:hover{border-color:var(--edge);color:var(--ink)}
+.editToolbar button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.editToolbar .tdiv{width:1px;align-self:stretch;background:var(--edge);margin:2px 4px}
+.editorWrap{position:relative}
+.editorPlaceholder{position:absolute;top:12px;left:0;color:var(--pencil);font-family:var(--wf);font-size:var(--wsz);line-height:var(--wlh);pointer-events:none}
+.editorBody{width:100%;min-height:50vh;outline:none;caret-color:var(--red);padding:12px 0 0;font-family:var(--wf);font-size:var(--wsz);line-height:var(--wlh)}
+.editorBody p,.editorBody div{margin:0 0 0.2em;text-indent:2.2em}
+.editorBody p.center,.editorBody div.center{text-align:center;text-indent:0}
 
 /* --- grammar --- */
 .grammarPanel{margin-top:14px;padding-top:12px;border-top:1px solid var(--edge)}

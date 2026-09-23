@@ -21,8 +21,9 @@ describe('Quire (local storage mode, no Supabase configured)', () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByText('+ New novel'));
-    const editor = await screen.findByPlaceholderText('Start writing…');
-    await user.type(editor, 'The river had risen past the third step.');
+    const editor = await screen.findByRole('textbox', { name: 'Scene text' });
+    editor.innerHTML = '<p>The river had risen past the third step.</p>';
+    fireEvent.input(editor);
     await flush(900);
     expect(screen.getByText(/8 words here/)).toBeInTheDocument();
     expect(screen.getByText(/Saved/)).toBeInTheDocument();
@@ -118,6 +119,36 @@ describe('Quire (local storage mode, no Supabase configured)', () => {
     expect(document.querySelector('.elabel').textContent).toBe('sibling');
   });
 
+  it('a scene written before rich text existed still loads, and indent/paragraph-style toolbar buttons work', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByText('+ New novel'));
+    const editor = await screen.findByRole('textbox', { name: 'Scene text' });
+
+    // Simulate a legacy plain-text scene (as every scene was stored before this feature).
+    editor.innerHTML = '<p>Old plain paragraph one.</p>';
+    fireEvent.input(editor);
+    await flush(50);
+
+    // Place the caret inside the paragraph, the way clicking into it would.
+    const block = editor.querySelector('p');
+    const range = document.createRange();
+    range.selectNodeContents(block);
+    range.collapse(true);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    await user.click(screen.getByRole('button', { name: 'Indent' }));
+    expect(block.style.textIndent).toBe('2.2em');
+
+    await user.click(screen.getByRole('button', { name: 'Centered paragraph' }));
+    expect(block.classList.contains('center')).toBe(true);
+
+    await user.click(screen.getByRole('button', { name: 'Normal paragraph' }));
+    expect(block.classList.contains('center')).toBe(false);
+  });
+
   it('progress: shows goal line, toggles to time, and edits the goal', async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -177,8 +208,9 @@ describe('Quire (local storage mode, no Supabase configured)', () => {
 
     render(<App />);
     await user.click(await screen.findByText('+ New novel'));
-    const editor = await screen.findByPlaceholderText('Start writing…');
-    await user.type(editor, 'She be here.');
+    const editor = await screen.findByRole('textbox', { name: 'Scene text' });
+    editor.innerHTML = '<p>She be here.</p>';
+    fireEvent.input(editor);
     await user.click(screen.getByRole('button', { name: 'Grammar' }));
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled(), { timeout: 3000 });
@@ -186,7 +218,8 @@ describe('Quire (local storage mode, no Supabase configured)', () => {
     expect(screen.getByText('1 issue')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'is' }));
-    expect(editor.value).toBe('She is here.');
+    await flush(200);
+    expect(editor.textContent).toBe('She is here.');
     expect(screen.queryByText('Did you mean "is"?')).not.toBeInTheDocument();
 
     delete global.fetch;
