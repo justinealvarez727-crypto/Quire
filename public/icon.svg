@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#C9CED4"/>
+  <rect x="96" y="72" width="320" height="368" fill="#FCFCFA" stroke="#A9B0B8" stroke-width="6"/>
+  <rect x="116" y="72" width="10" height="368" fill="#C7362E" opacity="0.85"/>
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#171B21">
+    <text x="160" y="190" font-size="120" font-weight="700">Q</text>
+  </g>
+  <line x1="160" y1="230" x2="368" y2="230" stroke="#C7362E" stroke-width="6"/>
+  <line x1="160" y1="270" x2="368" y2="270" stroke="#BBD3EA" stroke-width="5"/>
+  <line x1="160" y1="308" x2="368" y2="308" stroke="#BBD3EA" stroke-width="5"/>
+  <line x1="160" y1="346" x2="330" y2="346" stroke="#BBD3EA" stroke-width="5"/>
+</svg>
